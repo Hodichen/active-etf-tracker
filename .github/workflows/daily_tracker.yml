@@ -17,10 +17,10 @@ jobs:
 
     steps:
     - name: 取得程式碼
-      uses: uses: actions/checkout@v4
+      uses: actions/checkout@v4
 
     - name: 設定 Python 環境
-      uses: uses: actions/setup-python@v5
+      uses: actions/setup-python@v5
       with:
         python-version: '3.10'
 
