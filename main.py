@@ -121,4 +121,22 @@ def analyze_and_save(etf_code, df_today):
             print(action_df[['股票代號', '股票名稱', '持有股數_昨', '持有股數_今', '股數增減']].to_string(index=False))
             print("-" * 50)
         else:
-            print(f"⏸️ {etf
+            print(f"⏸️ {etf_code} 今日持股與昨日完全相同，經理人無動作。")
+            
+    else:
+         print(f"📝 找不到 {etf_code} 昨天的資料，今天將建立基準點 (Day 1)。")
+
+    # 2. 將今天的資料存檔，覆寫舊檔案
+    df_today.to_csv(file_path, index=False, encoding='utf-8-sig')
+    print(f"💾 {etf_code} 最新持股清單已儲存至 {file_path}\n")
+
+
+if __name__ == "__main__":
+    print(f"=== 啟動主動型 ETF 追蹤程式 ===")
+    print(f"執行時間：{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
+    
+    for etf in ETF_LIST:
+        latest_data = fetch_today_data(etf)
+        analyze_and_save(etf, latest_data)
+        
+    print("✅ 程式執行完畢！")
