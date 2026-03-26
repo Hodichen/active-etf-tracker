@@ -1,0 +1,42 @@
+name: Daily Active ETF Tracker
+
+# 設定觸發條件
+on:
+  schedule:
+    # 台灣時間平日傍晚 6 點執行 (UTC 時間 10:00)
+    - cron: '0 10 * * 1-5'
+  workflow_dispatch: # 允許手動點擊執行測試
+
+jobs:
+  scrape-and-analyze:
+    runs-on: ubuntu-latest
+
+    # 賦予寫入權限，才能把 CSV 檔存回 GitHub
+    permissions:
+      contents: write
+
+    steps:
+    - name: 取得程式碼
+      uses: actions/checkout@v3
+
+    - name: 設定 Python 環境
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+
+    - name: 安裝套件
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: 執行 ETF 追蹤程式
+      run: python main.py
+
+    - name: 將最新持股資料 Commit 回 GitHub
+      run: |
+        git config --local user.email "github-actions[bot]@users.noreply.github.com"
+        git config --local user.name "github-actions[bot]"
+        git add *_latest.csv
+        # 如果檔案有變動才 commit，沒變動則略過
+        git diff --quiet && git diff --staged --quiet || git commit -m "自動更新：ETF 最新持股資料"
+        git push
