@@ -30,6 +30,10 @@ def fetch_today_data(etf_code):
             
             response = requests.post(url, json=payload, headers=headers)
             response.raise_for_status()
+            
+            # 👇 新增這行：把 API 真實的回傳內容印出來看！
+            print(f"🔍 API 原始回傳內容：{response.text[:1000]}")
+            
             data = response.json()
             
             # 智慧解析 JSON：找出包含持股明細的陣列
