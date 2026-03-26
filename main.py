@@ -80,3 +80,12 @@ def analyze_and_save(etf_code, df_today):
     """
     比對模組：讀取昨天的資料進行比對，並覆寫今天的資料
     """
+if __name__ == "__main__":
+    print(f"=== 啟動主動型 ETF 追蹤程式 ===")
+    print(f"執行時間：{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
+    
+    for etf in ETF_LIST:
+        latest_data = fetch_today_data(etf)
+        analyze_and_save(etf, latest_data)
+        
+    print("✅ 程式執行完畢！")
