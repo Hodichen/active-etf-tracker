@@ -1,17 +1,14 @@
 name: Daily Active ETF Tracker
 
-# 設定觸發條件
 on:
   schedule:
-    # 台灣時間平日傍晚 6 點執行 (UTC 時間 10:00)
     - cron: '0 10 * * 1-5'
-  workflow_dispatch: # 允許手動點擊執行測試
+  workflow_dispatch: 
 
 jobs:
   scrape-and-analyze:
     runs-on: ubuntu-latest
 
-    # 賦予寫入權限，才能把 CSV 檔存回 GitHub
     permissions:
       contents: write
 
@@ -37,6 +34,5 @@ jobs:
         git config --local user.email "github-actions[bot]@users.noreply.github.com"
         git config --local user.name "github-actions[bot]"
         git add *_latest.csv
-        # 如果檔案有變動才 commit，沒變動則略過
         git diff --quiet && git diff --staged --quiet || git commit -m "自動更新：ETF 最新持股資料"
         git push
